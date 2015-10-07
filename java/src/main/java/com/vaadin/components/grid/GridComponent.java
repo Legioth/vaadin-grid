@@ -265,6 +265,20 @@ public class GridComponent implements SelectionHandler<Object>,
         container.dispatchEvent(event);
     }
 
+    private void triggerEvent(String eventName, Object data) {
+        NativeEvent event = createCustomEvent(eventName, data, false, true);
+        container.dispatchEvent(event);
+    }
+    
+    private static native NativeEvent createCustomEvent(String eventName,
+            Object detail, boolean canBubble, boolean cancelable) /*-{
+        return new CustomEvent(eventName, {
+          'detail' : detail,
+          'bubbles': canBuble,
+          'cancelable': cancelable
+        });
+    }-*/;
+
     public void setHeight(String height) {
         grid.setHeight(height);
     }
