@@ -12,8 +12,8 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HTML;
 import com.vaadin.client.widgets.Grid.Column;
 import com.vaadin.elements.common.js.JS;
-import com.vaadin.elements.common.js.JSArray;
 import com.vaadin.elements.common.js.JS.Setter;
+import com.vaadin.elements.common.js.JSArray;
 import com.vaadin.elements.grid.GridElement;
 import com.vaadin.elements.grid.config.JSCell;
 import com.vaadin.elements.grid.config.JSColumn;
@@ -71,10 +71,6 @@ public final class GridColumn extends Column<Object, Object> {
     }
 
     private void bindProperties() {
-        JS.definePropertyAccessors(jsColumn, "headerContent",
-                v -> contentOrNameChanged(jsColumn.getName(), v),
-                () -> getDefaultHeaderCellReference().getContent());
-
         JS.definePropertyAccessors(jsColumn, "hidden", v -> {
             setHidden((Boolean) v);
             gridElement.updateWidth();
