@@ -12,8 +12,8 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HTML;
 import com.vaadin.client.widgets.Grid.Column;
 import com.vaadin.elements.common.js.JS;
-import com.vaadin.elements.common.js.JSArray;
 import com.vaadin.elements.common.js.JS.Setter;
+import com.vaadin.elements.common.js.JSArray;
 import com.vaadin.elements.grid.GridElement;
 import com.vaadin.elements.grid.config.JSCell;
 import com.vaadin.elements.grid.config.JSColumn;
@@ -70,11 +70,45 @@ public final class GridColumn extends Column<Object, Object> {
                 staticSection.getDefaultHeader(), this);
     }
 
-    private void bindProperties() {
-        JS.definePropertyAccessors(jsColumn, "headerContent",
-                v -> contentOrNameChanged(jsColumn.getName(), v),
-                () -> getDefaultHeaderCellReference().getContent());
+    String mode = "text";
 
+    private void bindProperties() {
+
+        JS.definePropertyAccessors(jsColumn, "header", v -> {
+            String sv = String.valueOf(v);
+            sv = sv.replaceAll("<", "&lt;");
+            sv = sv.replaceAll(">", "&gt;");
+            contentOrNameChanged(jsColumn.getName(), sv);
+            mode = "text";
+        }, () -> {
+            if ("text".equals(mode)) {
+                return getDefaultHeaderCellReference().getContent();
+            } else {
+                return JS.getUndefined();
+            }
+        });
+
+        JS.definePropertyAccessors(jsColumn, "headerHTML", v -> {
+            contentOrNameChanged(jsColumn.getName(), String.valueOf(v));
+            mode = "html";
+        }, () -> {
+            if ("html".equals(mode)) {
+                return getDefaultHeaderCellReference().getContent();
+            } else {
+                return JS.getUndefined();
+            }
+        });
+
+        JS.definePropertyAccessors(jsColumn, "headerElement", v -> {
+            contentOrNameChanged(jsColumn.getName(), v);
+            mode = "element";
+        }, () -> {
+            if ("element".equals(mode)) {
+                return getDefaultHeaderCellReference().getContent();
+            } else {
+                return JS.getUndefined();
+            }
+        });
         JS.definePropertyAccessors(jsColumn, "hidden", v -> {
             setHidden((Boolean) v);
             gridElement.updateWidth();

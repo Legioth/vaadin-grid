@@ -60,10 +60,22 @@ public interface JSColumn {
     void setRenderer(JavaScriptObject o);
 
     @JsProperty
-    Object getHeaderContent();
+    String getHeader();
 
     @JsProperty
-    void setHeaderContent(Object o);
+    void setHeader(String s);
+
+    @JsProperty
+    String getHeaderHTML();
+
+    @JsProperty
+    void setHeaderHTML(String s);
+
+    @JsProperty
+    JavaScriptObject getHeaderElement();
+
+    @JsProperty
+    void setHeaderElementL(JavaScriptObject s);
 
     @JsProperty
     boolean getHidable();
